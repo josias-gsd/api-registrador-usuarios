@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="userCSS.css" />
+    <title>Usuários</title>
+  </head>
+  <body>
+    <form id="cadastrarform">
+      <div>
+        <p>Name <br /><input type="text" name="name" /></p>
+        <p>Email <br /><input type="text" name="email" /></p>
+        <div id="bt"><button type="submit">Registrar new user</button></div>
+      </div>
+      <div id="usuarios"></div>
+    </form>
+  </body>
+  <script>
+    document.getElementById("cadastrarform").onsubmit = async function (p) {
+      p.preventDefault();
+      const user = p.target;
+
+      const data = {
+        name: user.name.value,
+        email: user.email.value,
+        password: "josias",
+      };
+
+      const res = await fetch("http://localhost:3001/cadastrar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        await renderizarUsuarios();
+      } else {
+        const erro = await res.json();
+        alert(erro.message || "Erro ao Cadastrar");
+      }
+    };
+    async function renderizarUsuarios() {
+      const res = await fetch("http://localhost:3001/usuarios");
+      const usuarios = await res.json();
+      document.getElementById("usuarios").innerHTML = usuarios
+        .map(
+          (u) => `
+        <div style="
+          background: rgba(255,255,255,0.12);
+          border-radius: 10px;
+          padding: 1rem;
+          margin: 0.5rem 0;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          color: #fff;
+        ">
+          <strong>${u.name}</strong><br>
+          <span>${u.email}</span>
+          <button type="button" onclick="deletarUsuario('${u.id}')" style="margin-top:8px;">Deletar</button>
+        </div>
+      `
+        )
+        .join("");
+    }
+    async function deletarUsuario(id) {
+      await fetch(`http://localhost:3001/deletar/${id}`, { method: "DELETE" });
+      await renderizarUsuarios();
+    }
+  </script>
+</html>
