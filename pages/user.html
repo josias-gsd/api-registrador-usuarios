@@ -27,11 +27,14 @@
         password: "josias",
       };
 
-      const res = await fetch("http://localhost:3001/cadastrar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        "https://api-registrador-usuarios.vercel.app/cadastrar",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
       if (res.ok) {
         await renderizarUsuarios();
       } else {
@@ -40,7 +43,9 @@
       }
     };
     async function renderizarUsuarios() {
-      const res = await fetch("http://localhost:3001/usuarios");
+      const res = await fetch(
+        "https://api-registrador-usuarios.vercel.app/usuarios"
+      );
       const usuarios = await res.json();
       document.getElementById("usuarios").innerHTML = usuarios
         .map(
@@ -62,7 +67,9 @@
         .join("");
     }
     async function deletarUsuario(id) {
-      await fetch(`http://localhost:3001/deletar/${id}`, { method: "DELETE" });
+      await fetch(`https://api-registrador-usuarios.vercel.app/deletar/${id}`, {
+        method: "DELETE",
+      });
       await renderizarUsuarios();
     }
   </script>
