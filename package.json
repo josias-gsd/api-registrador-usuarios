@@ -8,6 +8,7 @@
   "main": "servidor.js",
   "scripts": {
     "build": "prisma generate",
+    "postinstall": "node prisma/postinstall.js",
     "start": "node servidor.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
