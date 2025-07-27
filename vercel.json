@@ -11,5 +11,6 @@
       "src": "/(.*)",
       "dest": "servidor.js"
     }
-  ]
+  ],
+  "buildCommand": "./vercel-build.sh"
 }
